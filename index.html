@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CCR Gala Planner 2026</title>
+<meta name="description" content="Project planner for the CEMS Club Rotterdam Gala — Thursday 3 December 2026.">
+<meta name="theme-color" content="#0b1a33">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1a33'/%3E%3Cpath d='M32 12l5.9 12 13.1 1.9-9.5 9.3 2.2 13.1L32 42.1l-11.7 6.2 2.2-13.1-9.5-9.3 13.1-1.9z' fill='%23c9a227'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-950: #07122a;
+    --navy-900: #0b1a33;
+    --navy-800: #13284a;
+    --navy-700: #1c3761;
+    --navy-500: #3f5a86;
+    --navy-200: #c9d3e3;
+    --navy-100: #e8edf5;
+    --gold: #c9a227;
+    --gold-dark: #9c7c14;
+    --gold-light: #e8d28a;
+    --gold-50: #fbf6e6;
+    --bg: #f5f3ed;
+    --surface: #ffffff;
+    --surface-2: #faf9f5;
+    --text: #14213d;
+    --muted: #5c6b82;
+    --border: #e4e0d5;
+    --danger: #b3261e;
+    --danger-bg: #fbeceb;
+    --st-todo: #8a96a8;
+    --st-progress: #d08c12;
+    --st-done: #2e7d4f;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(11, 26, 51, .06), 0 4px 16px rgba(11, 26, 51, .06);
+    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --lw: 280px; /* gantt label column */
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.5 var(--sans); min-height: 100vh;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  h1, h2, h3 { margin: 0; line-height: 1.2; }
+  a { color: var(--navy-700); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Header ---------- */
+  header.app {
+    background: linear-gradient(135deg, var(--navy-950), var(--navy-800));
+    color: #fff; border-bottom: 3px solid var(--gold);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .header-inner { max-width: 1280px; margin: 0 auto; padding: 14px 20px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 40px; height: 40px; border-radius: 10px; flex: none;
+    border: 1.5px solid var(--gold); display: grid; place-items: center;
+    font-family: var(--serif); color: var(--gold); font-weight: 700; font-size: 15px; letter-spacing: .5px;
+  }
+  .brand h1 { font-family: var(--serif); font-size: 20px; font-weight: 700; letter-spacing: .2px; }
+  .brand p { margin: 0; color: var(--gold-light); font-size: 12px; letter-spacing: .6px; text-transform: uppercase; }
+  .header-actions { margin-left: auto; display: flex; gap: 8px; }
+  nav.tabs { display: flex; gap: 4px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs button {
+    background: none; border: 0; color: #c8d1e0; padding: 10px 14px 12px;
+    font-weight: 600; font-size: 14px; border-bottom: 3px solid transparent; margin-bottom: -3px; white-space: nowrap;
+  }
+  nav.tabs button:hover { color: #fff; }
+  nav.tabs button[aria-selected="true"] { color: #fff; border-bottom-color: var(--gold-light); }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 20px 60px; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .view-head { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .view-head h2 { font-family: var(--serif); font-size: 26px; }
+  .view-head .sub { color: var(--muted); margin: 2px 0 0; }
+  .view-head .spacer { flex: 1; }
+
+  /* ---------- Buttons & form controls ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; border-radius: 10px;
+    padding: 8px 14px; font-weight: 600; font-size: 13.5px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); transition: background .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--navy-200); background: var(--surface-2); }
+  .btn.primary { background: var(--navy-800); border-color: var(--navy-800); color: #fff; }
+  .btn.primary:hover { background: var(--navy-700); }
+  .btn.gold { background: var(--gold); border-color: var(--gold); color: var(--navy-950); }
+  .btn.gold:hover { background: var(--gold-light); }
+  .btn.ghost-light { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: #fff; }
+  .btn.ghost-light:hover { background: rgba(255,255,255,.16); }
+  .btn.danger { color: var(--danger); }
+  .btn.danger:hover { background: var(--danger-bg); border-color: #f0c4c1; }
+  .btn.sm { padding: 5px 10px; font-size: 12.5px; border-radius: 8px; }
+  .icon-btn {
+    width: 32px; height: 32px; display: inline-grid; place-items: center; border-radius: 8px;
+    border: 1px solid transparent; background: none; color: var(--muted);
+  }
+  .icon-btn:hover { background: var(--navy-100); color: var(--navy-800); }
+  .icon-btn.del:hover { background: var(--danger-bg); color: var(--danger); }
+  .icon-btn svg, .btn svg { width: 16px; height: 16px; flex: none; }
+  select, input[type="text"], input[type="date"], input[type="search"], textarea {
+    border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--surface);
+    min-height: 38px; width: 100%;
+  }
+  select:focus, input:focus, textarea:focus, button:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 1px;
+  }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .filters > * { width: auto; }
+  .filters input[type="search"] { flex: 1 1 220px; }
+  .check { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 500; user-select: none; }
+
+  /* ---------- Cards ---------- */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card-pad { padding: 18px 20px; }
+  .card h3 { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .card h3 .count { margin-left: auto; font-weight: 600; color: var(--muted); font-size: 12.5px; }
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  /* ---------- Dashboard ---------- */
+  .hero {
+    background: radial-gradient(1200px 300px at 90% -40%, rgba(201,162,39,.28), transparent 60%),
+                linear-gradient(135deg, var(--navy-900), var(--navy-700));
+    color: #fff; border-radius: var(--radius); padding: 24px 26px; display: flex; gap: 24px;
+    align-items: center; flex-wrap: wrap; border: 1px solid var(--navy-700); box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 8px; border: 1px solid rgba(232,210,138,.25); border-radius: 10px; pointer-events: none;
+  }
+  .hero .eyebrow { color: var(--gold-light); text-transform: uppercase; letter-spacing: 1.6px; font-size: 11.5px; font-weight: 600; }
+  .hero h2 { font-family: var(--serif); font-size: 30px; margin: 6px 0 4px; }
+  .hero .meta { color: #c8d1e0; }
+  .hero .meta b { color: #fff; font-weight: 600; }
+  .countdown { margin-left: auto; display: flex; gap: 10px; }
+  .cd-unit {
+    min-width: 72px; text-align: center; background: rgba(255,255,255,.06);
+    border: 1px solid rgba(232,210,138,.35); border-radius: 12px; padding: 10px 8px;
+  }
+  .cd-unit b { display: block; font-family: var(--serif); font-size: 32px; line-height: 1.1; color: var(--gold-light); font-variant-numeric: tabular-nums; }
+  .cd-unit span { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #c8d1e0; }
+  .cd-done { font-family: var(--serif); font-size: 22px; color: var(--gold-light); }
+
+  .kpi { padding: 16px 18px; display: flex; gap: 14px; align-items: center; min-height: 104px; }
+  .kpi .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .8px; font-weight: 600; }
+  .kpi .value { font-size: 26px; font-weight: 700; font-family: var(--serif); line-height: 1.15; }
+  .kpi .hint { color: var(--muted); font-size: 12.5px; }
+  .kpi.alert .value { color: var(--danger); }
+  .kpi .value.small { font-family: var(--sans); font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .ring { width: 68px; height: 68px; flex: none; }
+  .ring circle { fill: none; stroke-width: 7; }
+  .ring .track { stroke: var(--navy-100); }
+  .ring .fill { stroke: var(--gold); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .6s; }
+  .ring text { font: 700 15px var(--sans); fill: var(--text); }
+  .kpi-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--gold-50); color: var(--gold-dark); }
+  .kpi.alert .kpi-icon { background: var(--danger-bg); color: var(--danger); }
+  .kpi-icon svg { width: 22px; height: 22px; }
+
+  .bar-row { display: grid; grid-template-columns: 170px 1fr 96px; gap: 12px; align-items: center; padding: 7px 0; }
+  .bar-row .name { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .bar-row .name small { display: block; font-weight: 500; color: var(--muted); font-size: 11.5px; }
+  .bar-row .num { white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12.5px; }
+  .bar-row .num b { color: var(--text); }
+  .bar { height: 10px; border-radius: 99px; background: var(--navy-100); overflow: hidden; display: flex; }
+  .bar > span { height: 100%; display: block; }
+  .bar .seg-done { background: var(--st-done); }
+  .bar .seg-progress { background: var(--st-progress); }
+  .bar .seg-todo { background: var(--navy-200); }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; display: inline-block; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  .mini-list { list-style: none; margin: 0; padding: 0; }
+  .mini-list li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--border); }
+  .mini-list li:first-child { border-top: 0; }
+  .mini-list .t { flex: 1; min-width: 0; }
+  .mini-list .t div:first-child { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mini-list .t div + div { color: var(--muted); font-size: 12.5px; }
+  .empty { color: var(--muted); text-align: center; padding: 18px 8px; font-size: 13px; }
+  .empty.good::before { content: "✓ "; color: var(--st-done); font-weight: 700; }
+
+  /* ---------- Status & chips ---------- */
+  .status {
+    display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 4px 10px 4px 8px;
+    font-size: 12px; font-weight: 600; border: 1px solid; white-space: nowrap; background: var(--surface);
+    min-width: 108px; justify-content: flex-start; transition: transform .1s;
+  }
+  .status:active { transform: scale(.96); }
+  .status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
+  .status.todo { color: #5f6b7d; border-color: #d3d9e2; background: #f4f6f9; }
+  .status.progress { color: #9a6508; border-color: #f0d9a8; background: #fdf6e7; }
+  .status.progress::before { background: conic-gradient(currentColor 0 50%, transparent 50% 100%); border: 1.5px solid currentColor; }
+  .status.done { color: var(--st-done); border-color: #bfe0cc; background: #ecf7f0; }
+  .status.done::before { content: "✓"; background: currentColor; color: #fff; font-size: 8px; display: grid; place-items: center; width: 11px; height: 11px; }
+  .status.todo::before { background: transparent; border: 1.5px solid currentColor; }
+  .status-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid; flex: none; padding: 0; background: none; display: grid; place-items: center; font-size: 10px; font-weight: 700; }
+  .status-dot.todo { border-color: var(--st-todo); }
+  .status-dot.progress { border-color: var(--st-progress); background: conic-gradient(var(--st-progress) 0 50%, transparent 50% 100%); }
+  .status-dot.done { border-color: var(--st-done); background: var(--st-done); color: #fff; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 99px; background: var(--navy-100); color: var(--navy-700); white-space: nowrap; }
+  .chip.gold { background: var(--gold-50); color: var(--gold-dark); border: 1px solid var(--gold-light); }
+  .chip.red { background: var(--danger-bg); color: var(--danger); }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%; display: inline-grid; place-items: center; flex: none;
+    color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .3px; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border);
+  }
+  .avatar.lg { width: 48px; height: 48px; font-size: 16px; }
+  .avatar.none { background: var(--navy-100); color: var(--muted); }
+  .diamond { width: 11px; height: 11px; background: var(--gold); transform: rotate(45deg); border-radius: 2px; flex: none; display: inline-block; box-shadow: 0 0 0 1.5px var(--navy-900); }
+
+  /* ---------- Task list ---------- */
+  .phase { margin-bottom: 14px; overflow: hidden; }
+  .phase-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; user-select: none; border-left: 5px solid var(--pc); }
+  .phase-head h3 { margin: 0; font-size: 16px; font-family: var(--serif); }
+  .phase-head .ph-meta { color: var(--muted); font-size: 12.5px; }
+  .phase-head .bar { width: 140px; height: 8px; }
+  .phase-head .bar > span { background: var(--pc); }
+  .phase-head .chev { transition: transform .2s; color: var(--muted); }
+  .phase.collapsed .chev { transform: rotate(-90deg); }
+  .phase.collapsed .task-table, .phase.collapsed .phase-foot { display: none; }
+  .phase-head .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .task-table { border-top: 1px solid var(--border); }
+  .task-row {
+    display: grid; grid-template-columns: 120px minmax(0, 1fr) 190px 150px 72px; gap: 12px; align-items: center;
+    padding: 10px 18px; border-top: 1px solid var(--border);
+  }
+  .task-row:first-child { border-top: 0; }
+  .task-row:hover { background: var(--surface-2); }
+  .task-row.is-done .title { text-decoration: line-through; color: var(--muted); }
+  .task-row .title { font-weight: 600; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .task-row .title span.txt { overflow: hidden; text-overflow: ellipsis; }
+  .task-row .notes { color: var(--muted); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .task-row .owner { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+  .task-row .owner span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .task-row .dates { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .task-row .dates b { color: var(--text); font-weight: 600; }
+  .task-row .dates.overdue b { color: var(--danger); }
+  .task-row .acts { display: flex; justify-content: flex-end; gap: 2px; }
+  .phase-foot { padding: 8px 18px 12px; border-top: 1px solid var(--border); }
+  .add-link { background: none; border: 0; color: var(--navy-500); font-weight: 600; font-size: 13px; padding: 4px 0; }
+  .add-link:hover { color: var(--navy-800); text-decoration: underline; }
+  .task-head { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); font-weight: 700; background: var(--surface-2); padding-top: 8px; padding-bottom: 8px; }
+  .task-head:hover { background: var(--surface-2); }
+
+  /* ---------- Gantt ---------- */
+  .gantt-card { overflow: hidden; }
+  .gantt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .gantt { min-width: 1000px; position: relative; }
+  .g-row { display: flex; min-height: 34px; border-top: 1px solid var(--border); }
+  .g-label {
+    width: var(--lw); flex: none; padding: 6px 12px; display: flex; align-items: center; gap: 8px;
+    position: sticky; left: 0; background: var(--surface); z-index: 3; border-right: 1px solid var(--border); min-width: 0;
+    font-size: 13px;
+  }
+  .g-label .txt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+  .g-label .txt:hover { text-decoration: underline; }
+  .g-label .avatar { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; }
+  .g-row.is-done .g-label .txt { color: var(--muted); text-decoration: line-through; }
+  .g-track {
+    flex: 1; position: relative;
+    background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
+    background-size: calc(100% / 11) 100%;
+  }
+  .g-head { position: sticky; top: 0; z-index: 4; border-top: 0; background: var(--navy-900); color: #fff; min-height: 50px; }
+  .g-head .g-label { background: var(--navy-900); color: var(--gold-light); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-right-color: var(--navy-700); }
+  .g-head .g-track { display: flex; background: none; }
+  .g-week { flex: 1; border-left: 1px solid var(--navy-700); padding: 6px 8px; font-size: 11px; line-height: 1.35; color: #c8d1e0; }
+  .g-week b { display: block; color: #fff; font-size: 12px; }
+  .g-week.current { background: rgba(201,162,39,.18); }
+  .g-week.current b { color: var(--gold-light); }
+  .g-phase { background: var(--surface-2); min-height: 38px; }
+  .g-phase .g-label { background: var(--surface-2); font-weight: 700; font-family: var(--serif); font-size: 14px; border-left: 4px solid var(--pc); }
+  .g-phase .g-track { background-color: var(--surface-2); }
+  .g-bar {
+    position: absolute; top: 8px; bottom: 8px; border-radius: 6px; min-width: 6px; overflow: hidden;
+    background: color-mix(in srgb, var(--pc) 22%, #fff); border: 1.5px solid var(--pc); cursor: pointer;
+    display: flex; align-items: center;
+  }
+  .g-bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--pc); }
+  .g-bar.progress .fill { width: 50%; }
+  .g-bar.done .fill { width: 100%; }
+  .g-bar.overdue { border-color: var(--danger); box-shadow: 0 0 0 2px rgba(179,38,30,.2); }
+  .g-bar:hover { filter: brightness(1.05); box-shadow: 0 2px 8px rgba(11,26,51,.2); }
+  .g-summary { position: absolute; top: 14px; height: 10px; background: var(--pc); border-radius: 3px; opacity: .85; }
+  .g-summary::before, .g-summary::after { content: ""; position: absolute; bottom: -5px; border: 5px solid transparent; border-top-color: var(--pc); }
+  .g-summary::before { left: -1px; border-left-color: var(--pc); border-right-width: 0; }
+  .g-summary::after { right: -1px; border-right-color: var(--pc); border-left-width: 0; }
+  .g-ms {
+    position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; transform: rotate(45deg);
+    background: var(--gold); border: 2px solid var(--navy-900); border-radius: 3px; cursor: pointer; z-index: 2;
+  }
+  .g-ms.done { background: var(--st-done); border-color: var(--st-done); }
+  .g-ms.overdue { background: var(--danger); }
+  .g-ms-label { position: absolute; top: 50%; transform: translateY(-50%); margin-left: 14px; font-size: 11.5px; font-weight: 700; color: var(--navy-800); white-space: nowrap; pointer-events: none; }
+  .g-line { position: absolute; top: 0; bottom: 0; width: 0; z-index: 2; pointer-events: none; }
+  .g-line.today { border-left: 2px solid var(--danger); }
+  .g-line.gala { border-left: 2px dashed var(--gold); }
+  .g-tag {
+    position: absolute; bottom: 3px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; padding: 2px 7px;
+    border-radius: 99px; white-space: nowrap; text-transform: uppercase; letter-spacing: .6px;
+  }
+  .g-tag.today { background: var(--danger); color: #fff; z-index: 1; }
+  .g-tag.gala { background: var(--gold); color: var(--navy-950); }
+  .g-head .g-track { position: relative; padding-bottom: 18px; }
+  .g-lines { position: absolute; top: 0; bottom: 0; left: var(--lw); right: 0; pointer-events: none; z-index: 2; }
+  .gantt-legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 12px 18px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+  .gantt-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .lg-bar { width: 26px; height: 10px; border-radius: 3px; border: 1.5px solid var(--navy-500); display: inline-block; position: relative; overflow: hidden; background: var(--navy-100); }
+  .lg-bar i { position: absolute; inset: 0 auto 0 0; background: var(--navy-500); }
+
+  /* ---------- Team ---------- */
+  .team-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .person { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .person-top { display: flex; gap: 12px; align-items: center; }
+  .person-top h3 { margin: 0; font-size: 16px; display: block; }
+  .person-top .role { color: var(--gold-dark); font-weight: 600; font-size: 12.5px; }
+  .person-top .acts { margin-left: auto; display: flex; gap: 2px; align-self: flex-start; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 8px; text-align: center; }
+  .stat b { display: block; font-size: 18px; font-family: var(--serif); }
+  .stat span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; }
+  .stat.red b { color: var(--danger); }
+  .person .mini-list li { padding: 7px 0; }
+  .person .mini-list .t div:first-child { font-weight: 500; font-size: 13px; }
+  .add-card {
+    border: 2px dashed var(--navy-200); border-radius: var(--radius); background: transparent; min-height: 180px;
+    color: var(--navy-500); font-weight: 600; display: grid; place-items: center; gap: 6px; font-size: 15px;
+  }
+  .add-card:hover { border-color: var(--gold); color: var(--navy-800); background: var(--gold-50); }
+
+  /* ---------- Modal ---------- */
+  dialog {
+    border: 0; border-radius: 16px; padding: 0; width: min(560px, calc(100vw - 24px)); max-height: calc(100vh - 32px);
+    box-shadow: 0 20px 60px rgba(7,18,42,.35); color: var(--text); background: var(--surface);
+  }
+  dialog::backdrop { background: rgba(7,18,42,.55); backdrop-filter: blur(2px); }
+  .modal-head { background: var(--navy-900); color: #fff; padding: 16px 20px; display: flex; align-items: center; border-bottom: 3px solid var(--gold); }
+  .modal-head h2 { font-family: var(--serif); font-size: 20px; }
+  .modal-head .icon-btn { margin-left: auto; color: #c8d1e0; }
+  .modal-head .icon-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .modal-body { padding: 18px 20px; display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+  .field { display: grid; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-weight: 600; font-size: 12.5px; color: var(--navy-700); }
+  .field .help { color: var(--muted); font-size: 12px; }
+  .field.error input { border-color: var(--danger); }
+  .field .err { color: var(--danger); font-size: 12px; display: none; }
+  .field.error .err { display: block; }
+  textarea { min-height: 80px; resize: vertical; }
+  .seg { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .seg label { flex: 1; text-align: center; padding: 8px 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); border-left: 1px solid var(--border); }
+  .seg label:first-child { border-left: 0; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg input:checked + span { color: var(--navy-900); }
+  .seg label:has(input:checked) { background: var(--gold-50); color: var(--navy-900); box-shadow: inset 0 -3px 0 var(--gold); }
+  .modal-foot { display: flex; gap: 8px; padding: 14px 20px; border-top: 1px solid var(--border); background: var(--surface-2); }
+  .modal-foot .spacer { flex: 1; }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+    background: var(--navy-900); color: #fff; border-radius: 12px; padding: 10px 12px 10px 16px; display: flex; gap: 12px; align-items: center;
+    box-shadow: 0 10px 30px rgba(7,18,42,.35); transition: all .25s; z-index: 50; max-width: calc(100vw - 32px); border: 1px solid var(--navy-700);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .toast button { background: none; border: 0; color: var(--gold-light); font-weight: 700; padding: 4px 8px; }
+
+  footer.app-foot { max-width: 1280px; margin: 0 auto; padding: 0 20px 30px; color: var(--muted); font-size: 12px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1020px) {
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .task-row { grid-template-columns: 116px minmax(0, 1fr) 150px 72px; }
+    .task-row .dates { grid-column: 2; grid-row: 2; margin-top: -6px; }
+    .task-row .owner { grid-column: 3; grid-row: 1 / span 2; }
+    .task-row .acts { grid-column: 4; grid-row: 1 / span 2; }
+    .task-head .dates { display: none; }
+  }
+  @media (max-width: 760px) {
+    :root { --lw: 150px; }
+    .grid-2 { grid-template-columns: minmax(0, 1fr); }
+    main { padding: 16px 16px 60px; }
+    .header-inner { padding: 12px 16px 0; }
+    .hero { padding: 20px; }
+    .hero h2 { font-size: 24px; }
+    .countdown { margin-left: 0; width: 100%; }
+    .cd-unit { flex: 1; min-width: 0; }
+    .cd-unit b { font-size: 26px; }
+    .bar-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 8px; }
+    .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
+    .mini-list .t div:first-child { white-space: normal; }
+    .phase-head { padding: 12px 14px; flex-wrap: wrap; }
+    .phase-head .bar { width: 80px; }
+    .task-head { display: none; }
+    .task-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; padding: 12px 14px; }
+    .task-row > * { grid-column: auto !important; grid-row: auto !important; margin: 0 !important; }
+    .task-row .main { grid-column: 1 / -1 !important; order: -1; }
+    .task-row .dates { order: 2; }
+    .task-row .owner { order: 3; grid-column: 1 !important; }
+    .task-row .acts { order: 4; }
+    .task-row .st { order: 1; }
+    .task-row .dates { grid-column: 2 !important; justify-self: end; text-align: right; }
+    .header-actions .label-txt { display: none; }
+    .brand h1 { font-size: 17px; }
+    .brand p { font-size: 10.5px; }
+    .g-label { font-size: 12px; padding: 6px 8px; }
+    .g-label .avatar { display: none; }
+    .gantt { min-width: 820px; }
+    .view-head h2 { font-size: 22px; }
+    .modal-body { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 360px) {
+    .kpis { grid-template-columns: minmax(0, 1fr); }
+    .kpi { min-height: 0; }
+  }
+  @media print {
+    header.app { position: static; }
+    nav.tabs, .header-actions, .filters, .acts, .phase-foot, .add-card { display: none !important; }
+    .view { display: block !important; page-break-after: always; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">CCR</div>
+      <div>
+        <h1>CCR Gala Planner 2026</h1>
+        <p>CEMS Club Rotterdam · Black Tie · 3 December 2026</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn gold sm" data-action="add-task" title="Add task">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="label-txt">New task</span>
+        </button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" data-view="dashboard">Dashboard</button>
+      <button role="tab" data-view="timeline">Timeline</button>
+      <button role="tab" data-view="tasks">Tasks</button>
+      <button role="tab" data-view="team">Team</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- DASHBOARD -->
+  <section class="view" id="view-dashboard" role="tabpanel" aria-label="Dashboard"></section>
+
+  <!-- TIMELINE -->
+  <section class="view" id="view-timeline" role="tabpanel" aria-label="Timeline">
+    <div class="view-head">
+      <div>
+        <h2>Timeline</h2>
+        <p class="sub">11 weeks · Monday 28 September – Sunday 13 December 2026</p>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    <div class="filters">
+      <select id="tl-person" aria-label="Filter by person"></select>
+      <select id="tl-phase" aria-label="Filter by phase"></select>
+      <label class="check"><input type="checkbox" id="tl-hide-done"> Hide completed</label>
+      <label class="check"><input type="checkbox" id="tl-ms-only"> Milestones only</label>
+    </div>
+    <div class="card gantt-card">
+      <div class="gantt-scroll"><div class="gantt" id="gantt"></div></div>
+      <div class="gantt-legend">
+        <span><i class="lg-bar"></i> Not started</span>
+        <span><i class="lg-bar"><i style="width:50%"></i></i> In progress</span>
+        <span><i class="lg-bar"><i style="width:100%"></i></i> Complete</span>
+        <span><i class="diamond"></i> Milestone</span>
+        <span><i style="width:2px;height:14px;background:var(--danger);display:inline-block"></i> Today</span>
+        <span><i style="width:0;height:14px;border-left:2px dashed var(--gold);display:inline-block"></i> Gala night</span>
+        <span><i class="lg-bar" style="border-color:var(--danger)"></i> Overdue</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TASKS -->
+  <section class="view" id="view-tasks" role="tabpanel" aria-label="Tasks">
+    <div class="view-head">
+      <div>
+        <h2>Tasks by phase</h2>
+        <p class="sub">Click a status to cycle it: Not Started → In Progress → Complete.</p>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn sm" data-action="expand-all">Expand all</button>
+      <button class="btn sm" data-action="collapse-all">Collapse all</button>
+      <button class="btn primary" data-action="add-task">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add task
+      </button>
+    </div>
+    <div class="filters">
+      <input type="search" id="f-search" placeholder="Search tasks…" aria-label="Search tasks">
+      <select id="f-person" aria-label="Filter by person"></select>
+      <select id="f-status" aria-label="Filter by status"></select>
+      <label class="check"><input type="checkbox" id="f-overdue"> Overdue only</label>
+    </div>
+    <div id="phase-list"></div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="view" id="view-team" role="tabpanel" aria-label="Team">
+    <div class="view-head">
+      <div>
+        <h2>Team</h2>
+        <p class="sub">The CCR board and their workload for the gala.</p>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn primary" data-action="add-person">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add person
+      </button>
+    </div>
+    <div class="team-grid" id="team-grid"></div>
+
+    <div class="card card-pad" style="margin-top:24px">
+      <h3>Data &amp; backup</h3>
+      <p style="margin:0 0 12px;color:var(--muted)">Everything is saved automatically in this browser (localStorage). To share the plan with the board or move it to another device, export a backup file and import it elsewhere.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" data-action="export">Export backup (.json)</button>
+        <button class="btn" data-action="import">Import backup…</button>
+        <button class="btn danger" data-action="reset">Reset to sample plan</button>
+        <input type="file" id="import-file" accept="application/json,.json" hidden>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="app-foot">
+  <span>CEMS Club Rotterdam · Gala 2026 planner</span>
+  <span id="save-state">Saved in this browser</span>
+</footer>
+
+<dialog id="modal"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-msg"></span><button id="toast-undo" hidden>Undo</button></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* =========================================================
+     Constants
+     ========================================================= */
+  const STORAGE_KEY = 'ccr-gala-planner-v1';
+  const PLAN_START = '2026-09-28';   // Monday, week 1
+  const PLAN_END = '2026-12-13';     // Sunday, end of week 11
+  const GALA_DATE = '2026-12-03';    // Thursday
+  const GALA_TIME = [19, 0];         // doors open 19:00
+  const WEEKS = 11;
+
+  const PHASES = [
+    { id: 'planning',  name: 'Planning & Budget',    color: '#1f3f73' },
+    { id: 'venue',     name: 'Venue & Logistics',    color: '#2f7f7a' },
+    { id: 'partners',  name: 'Partners & Sponsors',  color: '#b08a1a' },
+    { id: 'marketing', name: 'Marketing & Tickets',  color: '#8c2f4a' },
+    { id: 'programme', name: 'Programme & Guests',   color: '#5b4b8a' },
+    { id: 'eventweek', name: 'Event Week',           color: '#b8612b' },
+    { id: 'post',      name: 'Post-Event',           color: '#5d7a4f' },
+  ];
+  const STATUSES = [
+    { id: 'todo',     name: 'Not Started' },
+    { id: 'progress', name: 'In Progress' },
+    { id: 'done',     name: 'Complete' },
+  ];
+  const AVATAR_COLORS = ['#1c3761', '#9c7c14', '#2f7f7a', '#8c2f4a', '#5b4b8a', '#b8612b', '#5d7a4f', '#3f5a86', '#7a4a2c', '#2b6a8f'];
+
+  const ICON = {
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+    chev: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+    alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
+    flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h12l-2 4 2 4H4"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+  };
+
+  /* =========================================================
+     Date helpers (all dates are local, stored as YYYY-MM-DD)
+     ========================================================= */
+  const DAY = 86400000;
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  function parseDate(s) {
+    if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+    const [y, m, d] = s.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function toISO(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+  function daysBetween(a, b) { return Math.round((b - a) / DAY); }
+  function fmt(s, withDow = false) {
+    const d = typeof s === 'string' ? parseDate(s) : s;
+    if (!d) return '—';
+    return `${withDow ? DOW[d.getDay()] + ' ' : ''}${d.getDate()} ${MONTHS[d.getMonth()]}`;
+  }
+  function todayDate() {
+    // ?today=YYYY-MM-DD lets you preview the planner at another point in time.
+    const override = parseDate(new URLSearchParams(location.search).get('today'));
+    if (override) return override;
+    const n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }
+  function nowDate() {
+    const override = parseDate(new URLSearchParams(location.search).get('today'));
+    if (override) { const n = new Date(); override.setHours(n.getHours(), n.getMinutes(), n.getSeconds()); return override; }
+    return new Date();
+  }
+  const START_D = parseDate(PLAN_START);
+  const END_D = parseDate(PLAN_END);
+  const TOTAL_DAYS = daysBetween(START_D, END_D) + 1;
+
+  function relDays(n) {
+    if (n === 0) return 'today';
+    if (n === 1) return 'tomorrow';
+    if (n === -1) return 'yesterday';
+    return n > 0 ? `in ${n} days` : `${-n} days ago`;
+  }
+  function weekOf(d) { return Math.floor(daysBetween(START_D, d) / 7) + 1; }
+
+  /* =========================================================
+     Sample data
+     ========================================================= */
+  function sampleData() {
+    const people = [
+      ['p-pres',   'President'],
+      ['p-treas',  'Treasurer'],
+      ['p-social', 'Head of Social'],
+      ['p-corp',   'Head of Corporate'],
+      ['p-mkt',    'Head of Marketing'],
+      ['p-alumni', 'Head of Alumni'],
+      ['p-csr',    'Head of CSR'],
+    ].map(([id, role], i) => ({ id, name: '', role, color: AVATAR_COLORS[i] }));
+
+    // [phase, title, owner, start, due, milestone, status, notes]
+    const T = [
+      ['planning', 'Gala kick-off meeting with the full board', 'p-pres', '2026-09-28', '2026-09-30', 0, 'progress', 'Agree on ambition, roles, key dates and weekly check-in slot.'],
+      ['planning', 'Define gala concept, theme & dress code', 'p-social', '2026-09-29', '2026-10-05', 0, 'todo', 'Black tie. Shortlist 3 themes and vote at board meeting.'],
+      ['planning', 'Set up master planning & shared drive', 'p-pres', '2026-09-28', '2026-10-02', 0, 'progress', 'Folder structure for contracts, invoices, design assets.'],
+      ['planning', 'Draft event budget (costs & revenues)', 'p-treas', '2026-09-28', '2026-10-06', 0, 'progress', 'Include venue, catering, DJ, décor, photography, 10% contingency.'],
+      ['planning', 'Ticket pricing model & break-even analysis', 'p-treas', '2026-10-05', '2026-10-09', 0, 'todo', 'Early bird / regular / alumni tiers.'],
+      ['planning', 'Budget approved by board', 'p-treas', '2026-10-09', '2026-10-09', 1, 'todo', ''],
+      ['planning', 'Risk assessment, alcohol policy & insurance check', 'p-pres', '2026-10-12', '2026-10-23', 0, 'todo', 'Check event liability insurance and university guidelines.'],
+      ['planning', 'Mid-term budget review', 'p-treas', '2026-11-09', '2026-11-13', 0, 'todo', 'Compare actuals vs. budget, adjust ticket targets if needed.'],
+
+      ['venue', 'Shortlist venues & request quotes', 'p-social', '2026-09-28', '2026-10-07', 0, 'progress', 'Capacity 250–350, central Rotterdam, reachable by public transport.'],
+      ['venue', 'Venue site visits', 'p-social', '2026-10-05', '2026-10-14', 0, 'todo', 'Check sound restrictions, cloakroom, accessibility, end time.'],
+      ['venue', 'Venue contract signed', 'p-pres', '2026-10-19', '2026-10-19', 1, 'todo', 'Co-signed by President and Treasurer.'],
+      ['venue', 'Book catering & drinks package', 'p-social', '2026-10-19', '2026-10-30', 0, 'todo', 'Welcome drink, walking dinner, dietary options.'],
+      ['venue', 'Book DJ / live band', 'p-social', '2026-10-19', '2026-11-06', 0, 'todo', ''],
+      ['venue', 'Book photographer & videographer', 'p-mkt', '2026-10-26', '2026-11-06', 0, 'todo', 'Photobooth option for partners.'],
+      ['venue', 'Arrange AV, lighting & stage', 'p-social', '2026-11-02', '2026-11-13', 0, 'todo', 'Microphones for speeches, projector for partner slides.'],
+      ['venue', 'Security, cloakroom & first aid', 'p-social', '2026-11-09', '2026-11-20', 0, 'todo', ''],
+      ['venue', 'Décor, floor plan & table layout', 'p-social', '2026-11-16', '2026-11-27', 0, 'todo', ''],
+
+      ['partners', 'Sponsorship deck & partner packages', 'p-corp', '2026-09-29', '2026-10-09', 0, 'todo', 'Gold / Silver / Bronze packages with clear deliverables.'],
+      ['partners', 'Outreach to corporate partners', 'p-corp', '2026-10-12', '2026-10-30', 0, 'todo', 'Start with existing CEMS corporate partners.'],
+      ['partners', 'Alumni outreach for tables & donations', 'p-alumni', '2026-10-12', '2026-11-06', 0, 'todo', ''],
+      ['partners', 'Main partner confirmed', 'p-corp', '2026-11-06', '2026-11-06', 1, 'todo', ''],
+      ['partners', 'In-kind sponsors & goodie bags', 'p-corp', '2026-10-26', '2026-11-13', 0, 'todo', 'Drinks sponsor, raffle prizes, goodie bag items.'],
+      ['partners', 'Partner contracts & invoices', 'p-treas', '2026-11-02', '2026-11-13', 0, 'todo', ''],
+      ['partners', 'Collect partner logos & branding deliverables', 'p-corp', '2026-11-09', '2026-11-20', 0, 'todo', 'Logo wall, programme booklet, social posts.'],
+
+      ['marketing', 'Visual identity & design kit', 'p-mkt', '2026-10-05', '2026-10-16', 0, 'todo', 'Navy & gold, poster, Instagram templates.'],
+      ['marketing', 'Save-the-date announcement live', 'p-mkt', '2026-10-21', '2026-10-21', 1, 'todo', ''],
+      ['marketing', 'Set up ticketing platform', 'p-treas', '2026-10-19', '2026-10-28', 0, 'todo', 'Tiers, promo codes, QR tickets, refund policy.'],
+      ['marketing', 'Ticket sales launch', 'p-mkt', '2026-11-02', '2026-11-02', 1, 'todo', ''],
+      ['marketing', 'Social media content calendar', 'p-mkt', '2026-10-19', '2026-12-02', 0, 'todo', '3 posts a week, reels from venue visit and partner reveals.'],
+      ['marketing', 'Early bird closes – switch to regular price', 'p-treas', '2026-11-16', '2026-11-16', 0, 'todo', ''],
+      ['marketing', 'Guest info guide (dress code, route, timings)', 'p-mkt', '2026-11-16', '2026-11-20', 0, 'todo', ''],
+      ['marketing', 'Countdown campaign & reminder emails', 'p-mkt', '2026-11-16', '2026-12-02', 0, 'todo', ''],
+      ['marketing', 'Ticket sales close', 'p-treas', '2026-11-27', '2026-11-27', 1, 'todo', ''],
+
+      ['programme', 'Invite keynote speaker / guest of honour', 'p-pres', '2026-10-12', '2026-10-30', 0, 'todo', 'CEMS programme director or alumni speaker.'],
+      ['programme', 'Invite alumni & CEMS faculty', 'p-alumni', '2026-10-19', '2026-11-06', 0, 'todo', ''],
+      ['programme', 'Charity raffle & CSR partner', 'p-csr', '2026-10-19', '2026-11-13', 0, 'todo', 'Choose charity, collect prizes, arrange payment method.'],
+      ['programme', 'Draft run-of-show for the evening', 'p-social', '2026-10-26', '2026-11-06', 0, 'todo', 'Doors 19:00, dinner, speeches, raffle, party until 01:00.'],
+      ['programme', 'Awards & recognition segment', 'p-pres', '2026-11-09', '2026-11-20', 0, 'todo', ''],
+      ['programme', 'Sustainability plan (waste, transport, suppliers)', 'p-csr', '2026-11-02', '2026-11-13', 0, 'todo', ''],
+      ['programme', 'Dietary requirements & seating plan', 'p-social', '2026-11-20', '2026-11-27', 0, 'todo', ''],
+      ['programme', 'MC & speakers briefing', 'p-pres', '2026-11-23', '2026-11-27', 0, 'todo', ''],
+      ['programme', 'Run-of-show signed off', 'p-pres', '2026-11-27', '2026-11-27', 1, 'todo', ''],
+
+      ['eventweek', 'Final headcount to venue & caterer', 'p-social', '2026-11-30', '2026-11-30', 0, 'todo', ''],
+      ['eventweek', 'Print guest list, name cards & signage', 'p-mkt', '2026-11-30', '2026-12-01', 0, 'todo', ''],
+      ['eventweek', 'Volunteer & crew briefing', 'p-social', '2026-12-01', '2026-12-01', 0, 'todo', 'Shifts: door, cloakroom, raffle, partner hosting.'],
+      ['eventweek', 'Partner hosting plan & welcome', 'p-corp', '2026-11-30', '2026-12-03', 0, 'todo', ''],
+      ['eventweek', 'Venue setup & rehearsal', 'p-social', '2026-12-02', '2026-12-03', 0, 'todo', ''],
+      ['eventweek', 'Door check-in & ticket scanning', 'p-treas', '2026-12-03', '2026-12-03', 0, 'todo', ''],
+      ['eventweek', 'CCR Gala night', 'p-pres', '2026-12-03', '2026-12-03', 1, 'todo', 'Black tie. Doors open 19:00.'],
+
+      ['post', 'Tear-down & venue handover', 'p-social', '2026-12-04', '2026-12-04', 0, 'todo', ''],
+      ['post', 'Thank-you messages to partners & guests', 'p-corp', '2026-12-04', '2026-12-08', 0, 'todo', ''],
+      ['post', 'Guest feedback survey', 'p-mkt', '2026-12-04', '2026-12-09', 0, 'todo', ''],
+      ['post', 'Share photos & aftermovie', 'p-mkt', '2026-12-07', '2026-12-11', 0, 'todo', ''],
+      ['post', 'Alumni follow-up & network update', 'p-alumni', '2026-12-07', '2026-12-11', 0, 'todo', ''],
+      ['post', 'Charity donation transfer & CSR report', 'p-csr', '2026-12-07', '2026-12-11', 0, 'todo', ''],
+      ['post', 'Final financial reconciliation', 'p-treas', '2026-12-07', '2026-12-11', 0, 'todo', 'Close all invoices, report result to board.'],
+      ['post', 'Evaluation & handover document for next board', 'p-pres', '2026-12-10', '2026-12-11', 1, 'todo', ''],
+    ];
+    const tasks = T.map(([phase, title, owner, start, due, ms, status, notes], i) => ({
+      id: 't' + (i + 1), phase, title, owner, start, due, milestone: !!ms, status, notes,
+    }));
+    return { version: 1, people, tasks };
+  }
+
+  /* =========================================================
+     State & persistence
+     ========================================================= */
+  let state;
+  let lastSnapshot = null;
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (isValid(data)) return normalize(data);
+      }
+    } catch (e) { /* storage unavailable or corrupt: fall back to sample data */ }
+    return sampleData();
+  }
+  function isValid(d) { return d && Array.isArray(d.people) && Array.isArray(d.tasks); }
+  function normalize(d) {
+    const phaseIds = new Set(PHASES.map(p => p.id));
+    const statusIds = new Set(STATUSES.map(s => s.id));
+    d.people = d.people.filter(p => p && p.id).map((p, i) => ({
+      id: String(p.id), name: String(p.name || ''), role: String(p.role || ''), color: p.color || AVATAR_COLORS[i % AVATAR_COLORS.length],
+    }));
+    d.tasks = d.tasks.filter(t => t && t.id && t.title).map(t => ({
+      id: String(t.id), title: String(t.title), phase: phaseIds.has(t.phase) ? t.phase : 'planning',
+      owner: t.owner || '', start: parseDate(t.start) ? t.start : (t.due || PLAN_START), due: parseDate(t.due) ? t.due : (t.start || PLAN_START),
+      milestone: !!t.milestone, status: statusIds.has(t.status) ? t.status : 'todo', notes: String(t.notes || ''),
+    }));
+    return d;
+  }
+  function save() {
+    const el = document.getElementById('save-state');
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      el.textContent = 'Saved in this browser · ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      el.textContent = 'Could not save — browser storage is unavailable. Use Export to keep a copy.';
+    }
+  }
+  function snapshot() { lastSnapshot = JSON.stringify(state); }
+  function commit() { save(); renderAll(); }
+
+  const uid = (p) => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+  /* =========================================================
+     Derived data
+     ========================================================= */
+  const phaseById = (id) => PHASES.find(p => p.id === id) || PHASES[0];
+  const personById = (id) => state.people.find(p => p.id === id);
+  const statusName = (id) => (STATUSES.find(s => s.id === id) || STATUSES[0]).name;
+  const personLabel = (p) => p ? (p.name ? p.name : p.role) : 'Unassigned';
+  const personSub = (p) => p && p.name ? p.role : '';
+
+  function isOverdue(t, today = todayDate()) {
+    return t.status !== 'done' && parseDate(t.due) < today;
+  }
+  function sortTasks(list) {
+    return list.slice().sort((a, b) => a.due.localeCompare(b.due) || a.start.localeCompare(b.start) || a.title.localeCompare(b.title));
+  }
+  function counts(list) {
+    const c = { total: list.length, todo: 0, progress: 0, done: 0 };
+    list.forEach(t => { c[t.status]++; });
+    c.pct = c.total ? Math.round(c.done / c.total * 100) : 0;
+    return c;
+  }
+  function initials(p) {
+    if (!p) return '?';
+    const src = (p.name || p.role || '?').replace(/^Head of /i, '');
+    const parts = src.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  /* =========================================================
+     Rendering helpers
+     ========================================================= */
+  const $ = (s, r = document) => r.querySelector(s);
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function avatar(p, cls = '') {
+    if (!p) return `<span class="avatar none ${cls}" title="Unassigned">–</span>`;
+    return `<span class="avatar ${cls}" style="background:${esc(p.color)}" title="${esc(personLabel(p))}${p.name ? ' · ' + esc(p.role) : ''}">${esc(initials(p))}</span>`;
+  }
+  function statusBtn(t) {
+    const next = statusName(nextStatus(t.status));
+    return `<button class="status ${t.status}" data-action="cycle" data-id="${esc(t.id)}" title="Click to mark as ${next}" aria-label="Status: ${statusName(t.status)}. Click to mark as ${next}">${statusName(t.status)}</button>`;
+  }
+  function statusDot(t) {
+    const next = statusName(nextStatus(t.status));
+    return `<button class="status-dot ${t.status}" data-action="cycle" data-id="${esc(t.id)}" title="${statusName(t.status)} — click to mark as ${next}" aria-label="Status: ${statusName(t.status)}. Click to mark as ${next}">${t.status === 'done' ? '✓' : ''}</button>`;
+  }
+  function nextStatus(s) {
+    const i = STATUSES.findIndex(x => x.id === s);
+    return STATUSES[(i + 1) % STATUSES.length].id;
+  }
+  function personOptions(selected, { all = false } = {}) {
+    let html = all
+      ? `<option value="">All people</option><option value="__none"${selected === '__none' ? ' selected' : ''}>Unassigned</option>`
+      : `<option value=""${selected ? '' : ' selected'}>Unassigned</option>`;
+    html += state.people.map(p => `<option value="${esc(p.id)}"${p.id === selected ? ' selected' : ''}>${esc(personLabel(p))}${p.name ? ' — ' + esc(p.role) : ''}</option>`).join('');
+    return html;
+  }
+
+  /* =========================================================
+     Dashboard
+     ========================================================= */
+  function renderDashboard() {
+    const today = todayDate();
+    const tasks = state.tasks;
+    const c = counts(tasks);
+    const overdue = sortTasks(tasks.filter(t => isOverdue(t, today)));
+    const milestones = sortTasks(tasks.filter(t => t.milestone && t.status !== 'done'));
+    const next = milestones[0];
+    const upcoming = sortTasks(tasks.filter(t => {
+      if (t.status === 'done' || isOverdue(t, today)) return false;
+      const d = daysBetween(today, parseDate(t.due));
+      return d >= 0 && d <= 14;
+    }));
+    const inWindow = today >= START_D && today <= END_D;
+    const week = weekOf(today);
+    const galaD = parseDate(GALA_DATE);
+    const daysToGala = daysBetween(today, galaD);
+
+    const r = 29, circ = 2 * Math.PI * r;
+    const ring = `<svg class="ring" viewBox="0 0 68 68" role="img" aria-label="${c.pct}% complete">
+        <circle class="track" cx="34" cy="34" r="${r}"/>
+        <circle class="fill" cx="34" cy="34" r="${r}" stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${(circ * (1 - c.pct / 100)).toFixed(2)}"/>
+        <text x="34" y="39" text-anchor="middle">${c.pct}%</text></svg>`;
+
+    let weekText;
+    if (today < START_D) weekText = `Planning starts <b>${fmt(PLAN_START, true)}</b> (${relDays(daysBetween(today, START_D))})`;
+    else if (inWindow) weekText = `Planning week <b>${week} of ${WEEKS}</b>`;
+    else weekText = `Planning period finished`;
+
+    const phaseRows = PHASES.map(ph => {
+      const pc = counts(tasks.filter(t => t.phase === ph.id));
+      const doneW = pc.total ? pc.done / pc.total * 100 : 0;
+      const progW = pc.total ? pc.progress / pc.total * 100 : 0;
+      return `<div class="bar-row">
+        <div class="name"><i class="swatch" style="background:${ph.color}"></i><span style="overflow:hidden;text-overflow:ellipsis">${esc(ph.name)}</span></div>
+        <div class="bar" title="${pc.done} complete, ${pc.progress} in progress, ${pc.todo} not started">
+          <span class="seg-done" style="width:${doneW}%;background:${ph.color}"></span>
+          <span class="seg-progress" style="width:${progW}%;background:${ph.color};opacity:.4"></span>
+        </div>
+        <div class="num"><b>${pc.pct}%</b> · ${pc.done}/${pc.total}</div>
+      </div>`;
+    }).join('');
+
+    const owners = state.people.map(p => ({ p, list: tasks.filter(t => t.owner === p.id) }));
+    const unassigned = tasks.filter(t => !personById(t.owner));
+    if (unassigned.length) owners.push({ p: null, list: unassigned });
+    const maxLoad = Math.max(1, ...owners.map(o => o.list.length));
+    const workloadRows = owners.map(({ p, list }) => {
+      const pc = counts(list);
+      const od = list.filter(t => isOverdue(t, today)).length;
+      const seg = (n, cls) => n ? `<span class="${cls}" style="width:${n / maxLoad * 100}%"></span>` : '';
+      return `<div class="bar-row">
+        <div class="name">${avatar(p)}<span style="min-width:0;overflow:hidden;text-overflow:ellipsis">${esc(personLabel(p))}${personSub(p) ? `<small>${esc(personSub(p))}</small>` : ''}</span></div>
+        <div class="bar" style="background:transparent" title="${pc.done} complete, ${pc.progress} in progress, ${pc.todo} not started">
+          ${seg(pc.done, 'seg-done')}${seg(pc.progress, 'seg-progress')}${seg(pc.todo, 'seg-todo')}
+        </div>
+        <div class="num"><b>${pc.total - pc.done}</b> open${od ? ` <span class="chip red" title="${od} overdue">${od}</span>` : ''}</div>
+      </div>`;
+    }).join('') || `<div class="empty">No team members yet.</div>`;
+
+    const miniTask = (t, showOverdue) => {
+      const p = personById(t.owner);
+      const d = daysBetween(today, parseDate(t.due));
+      return `<li>${statusDot(t)}
+        <div class="t"><div>${t.milestone ? '<i class="diamond" style="margin-right:6px;vertical-align:1px"></i>' : ''}<a href="#" data-action="edit-task" data-id="${esc(t.id)}" style="color:inherit;text-decoration:none">${esc(t.title)}</a></div>
+        <div><span class="swatch" style="background:${phaseById(t.phase).color};margin-right:5px"></span>${esc(phaseById(t.phase).name)} · due ${fmt(t.due, true)}</div></div>
+        ${showOverdue ? `<span class="chip red">${-d}d late</span>` : `<span class="chip">${d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : d + 'd'}</span>`}
+        ${avatar(p)}</li>`;
+    };
+
+    let msHtml;
+    if (next) {
+      const d = daysBetween(today, parseDate(next.due));
+      msHtml = `<div class="label">Next milestone</div>
+        <div class="value small">${esc(next.title)}</div>
+        <div class="hint">${fmt(next.due, true)} · ${d < 0 ? `<b style="color:var(--danger)">${-d} days overdue</b>` : relDays(d)}</div>`;
+    } else {
+      msHtml = `<div class="label">Next milestone</div><div class="value small">All milestones complete</div><div class="hint">Time to celebrate 🥂</div>`;
+    }
+
+    $('#view-dashboard').innerHTML = `
+      <div class="hero">
+        <div>
+          <div class="eyebrow">CEMS Club Rotterdam presents</div>
+          <h2>The CCR Gala 2026</h2>
+          <div class="meta">Thursday 3 December 2026 · Black tie · ${weekText}</div>
+        </div>
+        <div class="countdown" id="countdown" aria-live="off"></div>
+      </div>
+
+      <div class="grid kpis" style="margin-top:16px">
+        <div class="card kpi">${ring}<div><div class="label">Overall progress</div><div class="value">${c.done}<span style="font-size:16px;color:var(--muted)"> / ${c.total}</span></div><div class="hint">tasks complete</div></div></div>
+        <div class="card kpi"><div class="kpi-icon">${ICON.clock}</div><div><div class="label">In progress</div><div class="value">${c.progress}</div><div class="hint">${c.todo} not started yet</div></div></div>
+        <div class="card kpi ${overdue.length ? 'alert' : ''}"><div class="kpi-icon">${ICON.alert}</div><div><div class="label">Overdue</div><div class="value">${overdue.length}</div><div class="hint">${overdue.length ? 'need attention' : 'all on track'}</div></div></div>
+        <div class="card kpi"><div class="kpi-icon">${ICON.flag}</div><div style="min-width:0">${msHtml}</div></div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px">
+        <div class="card card-pad">
+          <h3>Progress per phase <span class="count">${c.pct}% overall</span></h3>
+          ${phaseRows}
+          <div class="legend"><span><i class="swatch" style="background:var(--navy-500)"></i> Complete</span><span><i class="swatch" style="background:var(--navy-500);opacity:.4"></i> In progress</span></div>
+        </div>
+        <div class="card card-pad">
+          <h3>Workload per person <span class="count">open tasks</span></h3>
+          ${workloadRows}
+          <div class="legend"><span><i class="swatch seg-done" style="background:var(--st-done)"></i> Complete</span><span><i class="swatch" style="background:var(--st-progress)"></i> In progress</span><span><i class="swatch" style="background:var(--navy-200)"></i> Not started</span><span><span class="chip red">n</span> overdue</span></div>
+        </div>
+        <div class="card card-pad">
+          <h3 style="color:${overdue.length ? 'var(--danger)' : 'inherit'}">Overdue tasks <span class="count">${overdue.length}</span></h3>
+          ${overdue.length ? `<ul class="mini-list">${overdue.slice(0, 8).map(t => miniTask(t, true)).join('')}</ul>${overdue.length > 8 ? `<button class="add-link" data-action="goto-overdue">View all ${overdue.length} overdue tasks →</button>` : ''}` : `<div class="empty good">Nothing overdue — great work.</div>`}
+        </div>
+        <div class="card card-pad">
+          <h3>Due in the next 14 days <span class="count">${upcoming.length}</span></h3>
+          ${upcoming.length ? `<ul class="mini-list">${upcoming.slice(0, 8).map(t => miniTask(t, false)).join('')}</ul>${upcoming.length > 8 ? `<div class="hint" style="color:var(--muted);font-size:12.5px;padding-top:6px">+ ${upcoming.length - 8} more</div>` : ''}` : `<div class="empty">Nothing due in the next two weeks.</div>`}
+        </div>
+      </div>`;
+    tickCountdown();
+  }
+
+  function tickCountdown() {
+    const el = document.getElementById('countdown');
+    if (!el) return;
+    const gala = parseDate(GALA_DATE); gala.setHours(GALA_TIME[0], GALA_TIME[1], 0, 0);
+    const diff = gala - nowDate();
+    if (diff <= 0) {
+      const after = daysBetween(parseDate(GALA_DATE), todayDate());
+      el.innerHTML = `<div class="cd-done">${after <= 0 ? 'Tonight’s the night ✨' : 'The gala has taken place ✨'}</div>`;
+      return;
+    }
+    const d = Math.floor(diff / DAY), h = Math.floor(diff % DAY / 3600000), m = Math.floor(diff % 3600000 / 60000), s = Math.floor(diff % 60000 / 1000);
+    const u = (n, l) => `<div class="cd-unit"><b>${String(n).padStart(2, '0')}</b><span>${l}</span></div>`;
+    el.innerHTML = u(d, d === 1 ? 'day' : 'days') + u(h, 'hours') + u(m, 'min') + u(s, 'sec');
+  }
+
+  /* =========================================================
+     Timeline (Gantt)
+     ========================================================= */
+  const tl = { person: '', phase: '', hideDone: false, msOnly: false };
+
+  function pctOf(dateStr, offset = 0) {
+    const d = parseDate(dateStr);
+    return Math.max(0, Math.min(100, (daysBetween(START_D, d) + offset) / TOTAL_DAYS * 100));
+  }
+
+  function renderTimeline() {
+    const today = todayDate();
+    $('#tl-person').innerHTML = personOptions(tl.person, { all: true });
+    $('#tl-phase').innerHTML = `<option value="">All phases</option>` + PHASES.map(p => `<option value="${p.id}"${p.id === tl.phase ? ' selected' : ''}>${esc(p.name)}</option>`).join('');
+    $('#tl-hide-done').checked = tl.hideDone;
+    $('#tl-ms-only').checked = tl.msOnly;
+
+    const curWeek = today >= START_D && today <= END_D ? weekOf(today) : 0;
+    let weeks = '';
+    for (let w = 0; w < WEEKS; w++) {
+      const d = new Date(START_D.getTime() + w * 7 * DAY);
+      const e = new Date(d.getTime() + 6 * DAY);
+      const hasGala = parseDate(GALA_DATE) >= d && parseDate(GALA_DATE) <= e;
+      weeks += `<div class="g-week${w + 1 === curWeek ? ' current' : ''}"><b>Week ${w + 1}${hasGala ? ' ★' : ''}</b>${d.getDate()} ${MONTHS[d.getMonth()]}–${e.getDate()}${e.getMonth() !== d.getMonth() ? ' ' + MONTHS[e.getMonth()] : ''}</div>`;
+    }
+    const showToday = today >= START_D && today <= END_D;
+    const tags = `<span class="g-tag gala" style="left:${pctOf(GALA_DATE, 0.5)}%">Gala</span>` +
+      (showToday ? `<span class="g-tag today" style="left:${pctOf(toISO(today), 0.5)}%">Today</span>` : '');
+    let html = `<div class="g-row g-head"><div class="g-label">Phase / task</div><div class="g-track">${weeks}${tags}</div></div>`;
+
+    let shown = 0;
+    PHASES.forEach(ph => {
+      if (tl.phase && tl.phase !== ph.id) return;
+      const all = state.tasks.filter(t => t.phase === ph.id);
+      let list = all.filter(t =>
+        (!tl.person || (tl.person === '__none' ? !personById(t.owner) : t.owner === tl.person)) &&
+        (!tl.hideDone || t.status !== 'done') &&
+        (!tl.msOnly || t.milestone));
+      if (!list.length) return;
+      list = sortTasks(list).sort((a, b) => a.start.localeCompare(b.start) || a.due.localeCompare(b.due));
+      const minS = all.reduce((m, t) => t.start < m ? t.start : m, all[0].start);
+      const maxD = all.reduce((m, t) => t.due > m ? t.due : m, all[0].due);
+      const pc = counts(all);
+      html += `<div class="g-row g-phase" style="--pc:${ph.color}">
+        <div class="g-label"><span class="txt" style="cursor:default;text-decoration:none">${esc(ph.name)}</span><span class="chip" title="Phase progress">${pc.pct}%</span></div>
+        <div class="g-track"><div class="g-summary" style="left:${pctOf(minS)}%;width:${Math.max(0.5, pctOf(maxD, 1) - pctOf(minS))}%" title="${esc(ph.name)}: ${fmt(minS)} – ${fmt(maxD)}"></div></div>
+      </div>`;
+      list.forEach(t => {
+        shown++;
+        const p = personById(t.owner);
+        const od = isOverdue(t, today);
+        const tip = `${t.title} · ${personLabel(p)} · ${t.milestone ? fmt(t.due, true) : fmt(t.start) + ' – ' + fmt(t.due)} · ${statusName(t.status)}${od ? ' · OVERDUE' : ''}`;
+        let mark;
+        if (t.milestone) {
+          const left = pctOf(t.due, 0.5);
+          mark = `<div class="g-ms ${t.status === 'done' ? 'done' : ''} ${od ? 'overdue' : ''}" style="left:${left}%" data-action="edit-task" data-id="${esc(t.id)}" title="${esc(tip)}"></div>
+                  <div class="g-ms-label" style="left:${left}%;${left > 80 ? 'margin-left:0;transform:translate(calc(-100% - 14px),-50%)' : ''}">${esc(t.title)}</div>`;
+        } else {
+          const left = pctOf(t.start);
+          const width = Math.max(0.6, pctOf(t.due, 1) - left);
+          mark = `<div class="g-bar ${t.status} ${od ? 'overdue' : ''}" style="left:${left}%;width:${width}%" data-action="edit-task" data-id="${esc(t.id)}" title="${esc(tip)}"><span class="fill"></span></div>`;
+        }
+        html += `<div class="g-row ${t.status === 'done' ? 'is-done' : ''}" style="--pc:${ph.color}">
+          <div class="g-label">${statusDot(t)}<span class="txt" data-action="edit-task" data-id="${esc(t.id)}" title="${esc(tip)}">${esc(t.title)}</span>${avatar(p)}</div>
+          <div class="g-track">${mark}</div></div>`;
+      });
+    });
+    if (!shown) html += `<div class="g-row"><div class="empty" style="flex:1">No tasks match these filters.</div></div>`;
+
+    // Today and gala lines
+    let lines = '';
+    if (showToday) lines += `<div class="g-line today" style="left:${pctOf(toISO(today), 0.5)}%"></div>`;
+    lines += `<div class="g-line gala" style="left:${pctOf(GALA_DATE, 0.5)}%"></div>`;
+    html += `<div class="g-lines">${lines}</div>`;
+    $('#gantt').innerHTML = html;
+
+    // On first open, scroll so the current week is in view (mostly useful on phones).
+    const sc = $('.gantt-scroll');
+    if (!tl.scrolled && showToday && sc.scrollWidth > sc.clientWidth) {
+      const lw = $('.g-head .g-label').offsetWidth;
+      const trackW = $('#gantt').offsetWidth - lw;
+      sc.scrollLeft = Math.max(0, trackW * pctOf(toISO(today)) / 100 - 3 * trackW / WEEKS / 2);
+      tl.scrolled = true;
+    }
+  }
+
+  /* =========================================================
+     Task list
+     ========================================================= */
+  const tf = { q: '', person: '', status: '', overdue: false };
+  const collapsed = new Set();
+
+  function renderTasks() {
+    const today = todayDate();
+    $('#f-person').innerHTML = personOptions(tf.person, { all: true });
+    $('#f-status').innerHTML = `<option value="">All statuses</option>` + STATUSES.map(s => `<option value="${s.id}"${s.id === tf.status ? ' selected' : ''}>${s.name}</option>`).join('');
+    $('#f-overdue').checked = tf.overdue;
+    if ($('#f-search').value !== tf.q) $('#f-search').value = tf.q;
+
+    const q = tf.q.trim().toLowerCase();
+    const filtering = q || tf.person || tf.status || tf.overdue;
+    const html = PHASES.map(ph => {
+      const all = state.tasks.filter(t => t.phase === ph.id);
+      const list = sortTasks(all.filter(t => {
+        const p = personById(t.owner);
+        if (q && !(t.title + ' ' + t.notes + ' ' + personLabel(p) + ' ' + (p ? p.role : '')).toLowerCase().includes(q)) return false;
+        if (tf.person && (tf.person === '__none' ? !!p : t.owner !== tf.person)) return false;
+        if (tf.status && t.status !== tf.status) return false;
+        if (tf.overdue && !isOverdue(t, today)) return false;
+        return true;
+      }));
+      if (filtering && !list.length) return '';
+      const pc = counts(all);
+      const isCollapsed = collapsed.has(ph.id) && !filtering;
+      const rows = list.map(t => {
+        const p = personById(t.owner);
+        const od = isOverdue(t, today);
+        const dueIn = daysBetween(today, parseDate(t.due));
+        return `<div class="task-row ${t.status === 'done' ? 'is-done' : ''}">
+          <div class="st">${statusBtn(t)}</div>
+          <div class="main">
+            <div class="title">${t.milestone ? '<i class="diamond" title="Milestone"></i>' : ''}<span class="txt">${esc(t.title)}</span>${od ? '<span class="chip red">Overdue</span>' : ''}</div>
+            ${t.notes ? `<div class="notes" title="${esc(t.notes)}">${esc(t.notes)}</div>` : ''}
+          </div>
+          <div class="owner">${avatar(p)}<span>${esc(personLabel(p))}</span></div>
+          <div class="dates ${od ? 'overdue' : ''}">${t.milestone || t.start === t.due ? `<b>${fmt(t.due, true)}</b>` : `${fmt(t.start)} → <b>${fmt(t.due)}</b>`}${t.status !== 'done' ? `<br><span>${od ? `${-dueIn} days late` : relDays(dueIn)}</span>` : ''}</div>
+          <div class="acts">
+            <button class="icon-btn" data-action="edit-task" data-id="${esc(t.id)}" title="Edit task" aria-label="Edit ${esc(t.title)}">${ICON.edit}</button>
+            <button class="icon-btn del" data-action="delete-task" data-id="${esc(t.id)}" title="Delete task" aria-label="Delete ${esc(t.title)}">${ICON.del}</button>
+          </div>
+        </div>`;
+      }).join('');
+      return `<div class="card phase ${isCollapsed ? 'collapsed' : ''}" style="--pc:${ph.color}">
+        <div class="phase-head" data-action="toggle-phase" data-phase="${ph.id}" role="button" tabindex="0" aria-expanded="${!isCollapsed}">
+          <span class="chev">${ICON.chev}</span>
+          <div><h3>${esc(ph.name)}</h3><div class="ph-meta">${pc.total} tasks · ${pc.done} complete · ${pc.progress} in progress${filtering ? ` · showing ${list.length}` : ''}</div></div>
+          <div class="right"><div class="bar"><span style="width:${pc.pct}%"></span></div><b style="min-width:38px;text-align:right">${pc.pct}%</b></div>
+        </div>
+        ${list.length ? `<div class="task-table">
+          <div class="task-row task-head"><div>Status</div><div>Task</div><div>Owner</div><div class="dates">Dates</div><div></div></div>
+          ${rows}</div>` : `<div class="task-table"><div class="empty">No tasks in this phase yet.</div></div>`}
+        <div class="phase-foot"><button class="add-link" data-action="add-task" data-phase="${ph.id}">+ Add task to ${esc(ph.name)}</button></div>
+      </div>`;
+    }).join('');
+    $('#phase-list').innerHTML = html || `<div class="card empty" style="padding:30px">No tasks match these filters. <button class="add-link" data-action="clear-filters">Clear filters</button></div>`;
+  }
+
+  /* =========================================================
+     Team
+     ========================================================= */
+  function renderTeam() {
+    const today = todayDate();
+    const cards = state.people.map(p => {
+      const list = state.tasks.filter(t => t.owner === p.id);
+      const c = counts(list);
+      const od = list.filter(t => isOverdue(t, today)).length;
+      const open = sortTasks(list.filter(t => t.status !== 'done'));
+      return `<div class="card person">
+        <div class="person-top">
+          ${avatar(p, 'lg')}
+          <div style="min-width:0"><h3>${esc(personLabel(p))}</h3><div class="role">${esc(p.name ? p.role : 'Name not set yet')}</div></div>
+          <div class="acts">
+            <button class="icon-btn" data-action="edit-person" data-id="${esc(p.id)}" title="Edit person" aria-label="Edit ${esc(personLabel(p))}">${ICON.edit}</button>
+            <button class="icon-btn del" data-action="delete-person" data-id="${esc(p.id)}" title="Delete person" aria-label="Delete ${esc(personLabel(p))}">${ICON.del}</button>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>${c.total}</b><span>Tasks</span></div>
+          <div class="stat"><b>${c.progress}</b><span>Doing</span></div>
+          <div class="stat"><b>${c.done}</b><span>Done</span></div>
+          <div class="stat ${od ? 'red' : ''}"><b>${od}</b><span>Overdue</span></div>
+        </div>
+        <div class="bar"><span class="seg-done" style="width:${c.total ? c.done / c.total * 100 : 0}%"></span><span class="seg-progress" style="width:${c.total ? c.progress / c.total * 100 : 0}%"></span></div>
+        ${open.length ? `<ul class="mini-list">${open.slice(0, 4).map(t => `<li>${statusDot(t)}<div class="t"><div><a href="#" data-action="edit-task" data-id="${esc(t.id)}" style="color:inherit;text-decoration:none">${esc(t.title)}</a></div><div>${esc(phaseById(t.phase).name)} · due ${fmt(t.due)}${isOverdue(t, today) ? ' · <b style="color:var(--danger)">overdue</b>' : ''}</div></div></li>`).join('')}</ul>
+          ${open.length > 4 ? `<button class="add-link" data-action="filter-person" data-id="${esc(p.id)}">View all ${open.length} open tasks →</button>` : ''}`
+          : `<div class="empty ${c.total ? 'good' : ''}">${c.total ? 'All tasks complete.' : 'No tasks assigned yet.'}</div>`}
+      </div>`;
+    }).join('');
+    $('#team-grid').innerHTML = cards + `<button class="add-card" data-action="add-person"><span style="font-size:28px;line-height:1">+</span>Add team member</button>`;
+  }
+
+  /* =========================================================
+     Modals
+     ========================================================= */
+  const modal = document.getElementById('modal');
+  function openModal(html) {
+    modal.innerHTML = html;
+    if (typeof modal.showModal === 'function') modal.showModal(); else modal.setAttribute('open', '');
+    const first = modal.querySelector('input[type="text"], select, textarea');
+    if (first) setTimeout(() => first.focus(), 30);
+  }
+  function closeModal() {
+    if (typeof modal.close === 'function') modal.close(); else modal.removeAttribute('open');
+  }
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+  function taskForm(task, presetPhase) {
+    const isNew = !task;
+    const t = task || {
+      title: '', phase: presetPhase || PHASES[0].id, owner: '', status: 'todo', milestone: false, notes: '',
+      start: toISO(clampDate(todayDate())), due: toISO(clampDate(new Date(todayDate().getTime() + 7 * DAY))),
+    };
+    openModal(`<form method="dialog" id="task-form" novalidate>
+      <div class="modal-head"><h2>${isNew ? 'New task' : 'Edit task'}</h2><button type="button" class="icon-btn" data-action="close-modal" aria-label="Close">${ICON.close}</button></div>
+      <div class="modal-body">
+        <div class="field full"><label for="tf-title">Task</label><input type="text" id="tf-title" name="title" required maxlength="140" value="${esc(t.title)}" placeholder="e.g. Book the DJ"><span class="err">Please give the task a name.</span></div>
+        <div class="field"><label for="tf-phase">Phase</label><select id="tf-phase" name="phase">${PHASES.map(p => `<option value="${p.id}"${p.id === t.phase ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>
+        <div class="field"><label for="tf-owner">Assigned to</label><select id="tf-owner" name="owner">${personOptions(personById(t.owner) ? t.owner : '')}</select></div>
+        <div class="field full"><label>Status</label><div class="seg" role="radiogroup">${STATUSES.map(s => `<label><input type="radio" name="status" value="${s.id}"${s.id === t.status ? ' checked' : ''}><span>${s.name}</span></label>`).join('')}</div></div>
+        <div class="field full"><label class="check" style="color:var(--text);font-weight:600"><input type="checkbox" name="milestone" id="tf-ms"${t.milestone ? ' checked' : ''}> <i class="diamond" style="margin:0 2px"></i> This is a milestone (single date)</label></div>
+        <div class="field" id="tf-start-wrap"><label for="tf-start">Start date</label><input type="date" id="tf-start" name="start" value="${esc(t.start)}"></div>
+        <div class="field" id="tf-due-wrap"><label for="tf-due" id="tf-due-label">Due date</label><input type="date" id="tf-due" name="due" required value="${esc(t.due)}"><span class="err" id="tf-due-err">Please choose a due date.</span></div>
+        <div class="field full"><label for="tf-notes">Notes</label><textarea id="tf-notes" name="notes" maxlength="1000" placeholder="Details, contacts, links…">${esc(t.notes)}</textarea></div>
+      </div>
+      <div class="modal-foot">
+        ${isNew ? '' : `<button type="button" class="btn danger" data-action="delete-task" data-id="${esc(task.id)}">Delete</button>`}
+        <div class="spacer"></div>
+        <button type="button" class="btn" data-action="close-modal">Cancel</button>
+        <button type="submit" class="btn primary">${isNew ? 'Add task' : 'Save changes'}</button>
+      </div>
+    </form>`);
+    const form = $('#task-form'), f = form.elements;
+    const syncMs = () => {
+      const ms = f.milestone.checked;
+      $('#tf-start-wrap').style.display = ms ? 'none' : '';
+      $('#tf-due-label').textContent = ms ? 'Milestone date' : 'Due date';
+      $('#tf-due-wrap').classList.toggle('full', ms);
+    };
+    f.milestone.addEventListener('change', syncMs);
+    syncMs();
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = {
+        title: f.title.value.trim(), phase: f.phase.value, owner: f.owner.value,
+        status: f.status.value || 'todo',
+        milestone: f.milestone.checked, start: f.start.value, due: f.due.value, notes: f.notes.value.trim(),
+      };
+      let ok = true;
+      form.querySelectorAll('.field.error').forEach(x => x.classList.remove('error'));
+      if (!data.title) { $('#tf-title').parentElement.classList.add('error'); ok = false; }
+      if (!parseDate(data.due)) { $('#tf-due-err').textContent = 'Please choose a due date.'; $('#tf-due-wrap').classList.add('error'); ok = false; }
+      if (data.milestone || !parseDate(data.start)) data.start = data.due;
+      if (ok && data.start > data.due) { $('#tf-due-err').textContent = 'The due date can’t be before the start date.'; $('#tf-due-wrap').classList.add('error'); ok = false; }
+      if (!ok) return;
+      if (isNew) {
+        state.tasks.push({ id: uid('t'), ...data });
+        toast('Task added');
+      } else {
+        Object.assign(task, data);
+        toast('Task updated');
+      }
+      closeModal();
+      commit();
+    });
+  }
+  function clampDate(d) { return d < START_D ? START_D : d > END_D ? END_D : d; }
+
+  function personForm(person) {
+    const isNew = !person;
+    const p = person || { name: '', role: '' };
+    const n = person ? state.tasks.filter(t => t.owner === person.id).length : 0;
+    openModal(`<form method="dialog" id="person-form" novalidate>
+      <div class="modal-head"><h2>${isNew ? 'Add team member' : 'Edit team member'}</h2><button type="button" class="icon-btn" data-action="close-modal" aria-label="Close">${ICON.close}</button></div>
+      <div class="modal-body">
+        <div class="field full"><label for="pf-role">Role</label><input type="text" id="pf-role" name="role" maxlength="60" value="${esc(p.role)}" placeholder="e.g. Head of Social" list="role-list">
+          <datalist id="role-list">${['President', 'Treasurer', 'Head of Social', 'Head of Corporate', 'Head of Marketing', 'Head of Alumni', 'Head of CSR', 'Volunteer', 'Committee member'].map(r => `<option value="${r}">`).join('')}</datalist>
+          <span class="err">Please enter a role or a name.</span></div>
+        <div class="field full"><label for="pf-name">Name <span style="font-weight:500;color:var(--muted)">(optional)</span></label><input type="text" id="pf-name" name="name" maxlength="60" value="${esc(p.name)}" placeholder="e.g. Sophie de Vries"><span class="help">If left empty, the role is shown instead.</span></div>
+        ${isNew ? '' : `<div class="field full"><span class="help">${n} task${n === 1 ? '' : 's'} assigned.</span></div>`}
+      </div>
+      <div class="modal-foot">
+        ${isNew ? '' : `<button type="button" class="btn danger" data-action="delete-person" data-id="${esc(person.id)}">Delete</button>`}
+        <div class="spacer"></div>
+        <button type="button" class="btn" data-action="close-modal">Cancel</button>
+        <button type="submit" class="btn primary">${isNew ? 'Add person' : 'Save changes'}</button>
+      </div>
+    </form>`);
+    const form = $('#person-form'), f = form.elements;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = f.name.value.trim(), role = f.role.value.trim();
+      if (!name && !role) { $('#pf-role').parentElement.classList.add('error'); return; }
+      if (isNew) {
+        const used = new Set(state.people.map(x => x.color));
+        const color = AVATAR_COLORS.find(c => !used.has(c)) || AVATAR_COLORS[state.people.length % AVATAR_COLORS.length];
+        state.people.push({ id: uid('p'), name, role, color });
+        toast('Team member added');
+      } else {
+        person.name = name; person.role = role;
+        toast('Team member updated');
+      }
+      closeModal();
+      commit();
+    });
+  }
+
+  /* =========================================================
+     Toast with undo
+     ========================================================= */
+  let toastTimer;
+  function toast(msg, undo = false) {
+    const el = $('#toast');
+    $('#toast-msg').textContent = msg;
+    $('#toast-undo').hidden = !undo;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), undo ? 6000 : 2200);
+  }
+  $('#toast-undo').addEventListener('click', () => {
+    if (!lastSnapshot) return;
+    state = normalize(JSON.parse(lastSnapshot));
+    lastSnapshot = null;
+    $('#toast').classList.remove('show');
+    commit();
+  });
+
+  /* =========================================================
+     Actions
+     ========================================================= */
+  const ACTIONS = {
+    'cycle'(el) {
+      const t = state.tasks.find(x => x.id === el.dataset.id);
+      if (!t) return;
+      t.status = nextStatus(t.status);
+      commit();
+      toast(`“${t.title}” → ${statusName(t.status)}`);
+    },
+    'add-task'(el) { taskForm(null, el.dataset.phase); },
+    'edit-task'(el) {
+      const t = state.tasks.find(x => x.id === el.dataset.id);
+      if (t) taskForm(t);
+    },
+    'delete-task'(el) {
+      const t = state.tasks.find(x => x.id === el.dataset.id);
+      if (!t || !confirm(`Delete the task “${t.title}”?`)) return;
+      snapshot();
+      state.tasks = state.tasks.filter(x => x !== t);
+      closeModal();
+      commit();
+      toast('Task deleted', true);
+    },
+    'add-person'() { personForm(null); },
+    'edit-person'(el) {
+      const p = personById(el.dataset.id);
+      if (p) personForm(p);
+    },
+    'delete-person'(el) {
+      const p = personById(el.dataset.id);
+      if (!p) return;
+      const n = state.tasks.filter(t => t.owner === p.id).length;
+      if (!confirm(`Remove ${personLabel(p)} from the team?${n ? `\n\nTheir ${n} task${n === 1 ? '' : 's'} will become unassigned.` : ''}`)) return;
+      snapshot();
+      state.tasks.forEach(t => { if (t.owner === p.id) t.owner = ''; });
+      state.people = state.people.filter(x => x !== p);
+      closeModal();
+      commit();
+      toast('Team member removed', true);
+    },
+    'close-modal'() { closeModal(); },
+    'toggle-phase'(el) {
+      const id = el.dataset.phase;
+      collapsed.has(id) ? collapsed.delete(id) : collapsed.add(id);
+      renderTasks();
+    },
+    'expand-all'() { collapsed.clear(); renderTasks(); },
+    'collapse-all'() { PHASES.forEach(p => collapsed.add(p.id)); renderTasks(); },
+    'clear-filters'() { Object.assign(tf, { q: '', person: '', status: '', overdue: false }); renderTasks(); },
+    'goto-overdue'() { Object.assign(tf, { q: '', person: '', status: '', overdue: true }); go('tasks'); },
+    'filter-person'(el) { Object.assign(tf, { q: '', person: el.dataset.id, status: '', overdue: false }); go('tasks'); },
+    'export'() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `ccr-gala-plan-${toISO(new Date())}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      toast('Backup downloaded');
+    },
+    'import'() { $('#import-file').click(); },
+    'reset'() {
+      if (!confirm('Replace the current plan with the sample plan? You can undo this right after.')) return;
+      snapshot();
+      state = sampleData();
+      commit();
+      toast('Sample plan restored', true);
+    },
+  };
+
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-action]');
+    if (!el || !ACTIONS[el.dataset.action]) return;
+    e.preventDefault();
+    ACTIONS[el.dataset.action](el);
+  });
+  document.addEventListener('keydown', (e) => {
+    const el = e.target.closest && e.target.closest('[data-action="toggle-phase"]');
+    if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); ACTIONS['toggle-phase'](el); }
+  });
+
+  $('#import-file').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!isValid(data)) throw new Error('invalid');
+        snapshot();
+        state = normalize(data);
+        commit();
+        toast('Backup imported', true);
+      } catch (err) {
+        alert('This file is not a valid CCR Gala Planner backup.');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // Filters
+  $('#tl-person').addEventListener('change', e => { tl.person = e.target.value; renderTimeline(); });
+  $('#tl-phase').addEventListener('change', e => { tl.phase = e.target.value; renderTimeline(); });
+  $('#tl-hide-done').addEventListener('change', e => { tl.hideDone = e.target.checked; renderTimeline(); });
+  $('#tl-ms-only').addEventListener('change', e => { tl.msOnly = e.target.checked; renderTimeline(); });
+  $('#f-search').addEventListener('input', e => { tf.q = e.target.value; renderTasks(); });
+  $('#f-person').addEventListener('change', e => { tf.person = e.target.value; renderTasks(); });
+  $('#f-status').addEventListener('change', e => { tf.status = e.target.value; renderTasks(); });
+  $('#f-overdue').addEventListener('change', e => { tf.overdue = e.target.checked; renderTasks(); });
+
+  /* =========================================================
+     Navigation
+     ========================================================= */
+  const VIEWS = ['dashboard', 'timeline', 'tasks', 'team'];
+  let current = 'dashboard';
+  function go(view) {
+    if (!VIEWS.includes(view)) view = 'dashboard';
+    current = view;
+    if (location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
+    document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.view === view));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+    renderAll();
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => go(b.dataset.view)));
+  window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+
+  function renderAll() {
+    ({ dashboard: renderDashboard, timeline: renderTimeline, tasks: renderTasks, team: renderTeam })[current]();
+  }
+
+  /* =========================================================
+     Boot
+     ========================================================= */
+  state = load();
+  save();
+  go(location.hash.slice(1) || 'dashboard');
+  setInterval(tickCountdown, 1000);
+  // Re-render at midnight-ish so "today", overdue and the countdown stay accurate.
+  let lastDay = toISO(todayDate());
+  setInterval(() => { const d = toISO(todayDate()); if (d !== lastDay) { lastDay = d; renderAll(); } }, 60000);
+})();
+</script>
+</body>
+</html>
